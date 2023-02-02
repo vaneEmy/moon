@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  moon:
+    build: .
+    container_name: moon
+    command: /app/scripts/entry_point.sh
+    volumes:
+      - ./src:/app
+    ports:
+      - 4000:4000
+    environment:
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: moon_dev
+      PGHOST: moon_db
+      PGPORT: 5432
+    depends_on:
+      - moon_db
+  moon_db:
+    image: postgres
+    container_name: moon_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    restart: always
+    volumes:
+      - ./docker-volumes/postgres-data:/var/lib/postgresql/data
